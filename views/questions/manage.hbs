@@ -1,0 +1,26 @@
+<div class="container mt-4">
+    <h1>Manage Your Questions</h1>
+    {{#if questions.length}}
+        <ul class="list-group">
+            {{#each questions}}
+                <li class="list-group-item">
+                    <div>
+                        <strong>Title:</strong> {{this.title}}<br>
+                        <strong>Description:</strong> {{this.description}}<br>
+                        <strong>Created At:</strong> {{formatDate this.createdAt}}<br>
+                    </div>
+                    <div class="mt-2">
+                        <a href="/questions/edit/{{this._id}}" class="btn btn-primary mr-2">Edit</a>
+                        <form action="/questions/delete/{{this._id}}" method="POST" class="d-inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger mr-2">Delete</button>
+                        </form>
+                        <a href="/questions/detail/{{this._id}}" class="btn btn-secondary mr-2">View</a>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p class="mt-3">No questions found.</p>
+    {{/if}}
+</div>

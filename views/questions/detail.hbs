@@ -1,0 +1,55 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{question.title}}</h1>
+            <p class="card-text">{{question.description}}</p>
+            <p class="card-text">Asked by {{question.authorId.username}} on {{formatDate question.createdAt}}</p>
+            <p class="card-text">Question ID: {{question._id}}</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h2 class="card-title">Answers:</h2>
+             {{set "currentUserId" session.userId}}
+            {{set "questionAuthorId" question.authorId._id}}
+            {{#if answers.length}}
+            <ul class="list-unstyled">
+                {{#each answers}}
+                <li class="mb-4">
+                    <p>{{this.content}}</p>
+                    <p>Answered by {{this.authorId.username}} on {{formatDate this.createdAt}}</p>
+                    {{#if this.isAccepted}}
+                        <p class="text-success">This answer has been accepted</p>
+                    {{else}}
+                        {{#if (eq ../questionAuthorId ../currentUserId)}}
+                            <form action="/questions/answers/{{this._id}}/accept" method="POST">
+                                <button type="submit" class="btn btn-primary">Accept</button>
+                            </form>
+                        {{else}}
+                            <p>Current User ID: {{../currentUserId}}</p>
+                            <p>Question Author ID: {{../questionAuthorId}}</p>
+                            <p class="text-muted">You must be the author of the question to accept an answer.</p>
+                        {{/if}}
+                    {{/if}}
+                </li>
+                {{/each}}
+            </ul>
+            {{else}}
+                <p>No answers yet.</p>
+            {{/if}}
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h2 class="card-title">Add an answer:</h2>
+            <form action="/questions/{{question._id}}/answers" method="POST">
+                <div class="form-group">
+                    <textarea class="form-control" name="content" rows="4" placeholder="Your answer..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
